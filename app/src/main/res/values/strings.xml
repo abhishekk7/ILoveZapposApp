@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">I Love Zappos App</string>
+    <string name="brand_name">Brand: </string>
+    <string name="product_name">Product: </string>
 </resources>

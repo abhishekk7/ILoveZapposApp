@@ -3,6 +3,13 @@ package zappos.abhishek.ilovezapposapp;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -12,16 +19,32 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import zappos.abhishek.ilovezapposapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    SearchResult searchResultBase;
-    ActivityMainBinding binding;
     public static final String URL = "https://api.zappos.com";
     public static final String KEY = "b743e26728e16b81da139182bb2094357c31d331";
+
+    SearchResult searchResultBase;
+    ActivityMainBinding binding;
+    SearchView productSearchView;
+    ListView productListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        productSearchView = (SearchView) findViewById(R.id.productSearchView);
 
+        productSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                fetchData(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
     private void fetchData(String term) {
@@ -35,9 +58,21 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<SearchResult>() {
             @Override
             public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
-                int statusCode = response.code();
                 searchResultBase = response.body();
                 binding.setSearchResult(searchResultBase);
+
+                productListView = (ListView) findViewById(R.id.productListView);
+                AdapterProduct adapterProduct = new AdapterProduct(getApplicationContext(), searchResultBase.getResults());
+                productListView.setAdapter(adapterProduct);
+
+                productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Result result = (Result) productListView.getAdapter().getItem(position);
+                        Toast.makeText(getApplicationContext(), result.getBrandName() + position, Toast.LENGTH_LONG).show();
+                    }
+                });
+
             }
 
             @Override
