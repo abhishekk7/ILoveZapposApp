@@ -11,7 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    dataBinding{
+    dataBinding {
         enabled = true
     }
     buildTypes {
@@ -33,4 +33,5 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile 'com.android.support:design:23.4.0'
 }

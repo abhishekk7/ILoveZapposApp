@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="searchResult"
-            type="zappos.abhishek.ilovezapposapp.SearchResult"/>
+            type="zappos.abhishek.ilovezapposapp.SearchResult" />
     </data>
 
     <RelativeLayout
